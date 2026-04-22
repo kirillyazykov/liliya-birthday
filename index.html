@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Лилия — С Днём Рождения! 💐</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap');
@@ -20,8 +20,30 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow-x: hidden;
-            padding: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* === ХЛОПУШКИ === */
+        .cracker {
+            position: fixed;
+            font-size: 24px;
+            opacity: 0.3;
+            transition: all 0.5s ease;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .cracker.active {
+            opacity: 1;
+            transform: scale(1.3) rotate(15deg);
+            animation: pop 0.6s ease;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.5) rotate(20deg); }
+            100% { transform: scale(1.3) rotate(15deg); }
         }
 
         /* === КОНВЕРТ === */
@@ -30,6 +52,8 @@
             cursor: pointer;
             transition: transform 0.3s ease;
             z-index: 10;
+            width: 300px;
+            height: 200px;
         }
 
         .envelope-container:hover {
@@ -37,8 +61,8 @@
         }
 
         .envelope {
-            width: 320px;
-            height: 220px;
+            width: 100%;
+            height: 100%;
             background: linear-gradient(135deg, #e8d5d0 0%, #d4c4c0 100%);
             position: relative;
             box-shadow: 0 10px 40px rgba(0,0,0,0.15);
@@ -52,9 +76,9 @@
             left: 0;
             width: 0;
             height: 0;
-            border-left: 160px solid transparent;
-            border-right: 160px solid transparent;
-            border-top: 110px solid #f0e0db;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid #f0e0db;
             transform-origin: top;
             transition: transform 0.6s ease;
             z-index: 3;
@@ -72,9 +96,9 @@
             left: 0;
             width: 0;
             height: 0;
-            border-left: 160px solid #d4c4c0;
-            border-right: 160px solid #d4c4c0;
-            border-bottom: 110px solid #c9b8b4;
+            border-left: 150px solid #d4c4c0;
+            border-right: 150px solid #d4c4c0;
+            border-bottom: 100px solid #c9b8b4;
             z-index: 2;
         }
 
@@ -86,6 +110,7 @@
             text-align: center;
             z-index: 4;
             transition: opacity 0.4s ease;
+            width: 100%;
         }
 
         .envelope.open .envelope-content {
@@ -94,7 +119,7 @@
 
         .recipient-name {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 32px;
+            font-size: 30px;
             color: #6b5b57;
             letter-spacing: 3px;
             margin-bottom: 10px;
@@ -112,31 +137,40 @@
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(0) rotateY(90deg);
-            width: 340px;
+            transform: translate(-50%, -50%) scale(0);
+            width: 300px;
             background: white;
-            padding: 20px 20px 70px 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-            z-index: 5;
+            padding: 18px 18px 65px 18px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            z-index: 20;
             transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
+            border-radius: 4px;
         }
 
         .photo-card.show {
-            transform: translate(-50%, -50%) scale(1) rotateY(0deg);
+            transform: translate(-50%, -50%) scale(1);
         }
 
-        .photo-card.flipped {
-            transform: translate(-50%, -50%) rotateY(180deg);
+        .photo-inner {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            transform-style: preserve-3d;
+            transition: transform 0.8s ease;
+        }
+
+        .photo-card.flipped .photo-inner {
+            transform: rotateY(180deg);
         }
 
         .photo-front, .photo-back {
-            backface-visibility: hidden;
             position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
+            backface-visibility: hidden;
+            border-radius: 2px;
+            overflow: hidden;
         }
 
         .photo-front {
@@ -146,17 +180,18 @@
         .photo-back {
             transform: rotateY(180deg);
             background: linear-gradient(135deg, #faf8f5 0%, #f5ebe0 100%);
-            padding: 30px;
+            padding: 25px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
         }
 
         .photo-wrapper {
             width: 100%;
-            height: 340px;
+            height: 100%;
             background: #f0ebe5;
             overflow: hidden;
             position: relative;
@@ -182,10 +217,10 @@
 
         .flip-hint {
             position: absolute;
-            bottom: -40px;
+            bottom: -35px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 12px;
+            font-size: 11px;
             color: #8b7b77;
             white-space: nowrap;
             animation: pulse 2s ease-in-out infinite;
@@ -199,21 +234,21 @@
         /* === ОБРАТНАЯ СТОРОНА === */
         .birthday-title {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 28px;
+            font-size: 24px;
             color: #6b5b57;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             font-weight: 600;
         }
 
         .age-text {
-            font-size: 14px;
+            font-size: 12px;
             color: #8b7b77;
-            margin-bottom: 25px;
-            line-height: 1.6;
+            margin-bottom: 15px;
+            line-height: 1.5;
         }
 
         .wish-item {
-            margin: 20px 0;
+            margin: 12px 0;
             cursor: pointer;
             transition: all 0.3s ease;
             width: 100%;
@@ -224,14 +259,14 @@
         }
 
         .wish-candle {
-            font-size: 16px;
-            margin-right: 8px;
+            font-size: 14px;
+            margin-right: 6px;
         }
 
         .wish-text {
-            font-size: 13px;
+            font-size: 11px;
             color: #6b5b57;
-            line-height: 1.7;
+            line-height: 1.6;
             filter: blur(4px);
             opacity: 0.6;
             transition: all 0.5s ease;
@@ -253,11 +288,11 @@
         }
 
         .love-message {
-            margin-top: 30px;
-            padding-top: 20px;
+            margin-top: 20px;
+            padding-top: 15px;
             border-top: 1px solid #e0d5d0;
             font-family: 'Cormorant Garamond', serif;
-            font-size: 20px;
+            font-size: 16px;
             color: #c97b7b;
             font-style: italic;
             animation: heartbeat 2s ease-in-out infinite;
@@ -268,15 +303,58 @@
             50% { transform: scale(1.05); }
         }
 
+        /* === ТОРТИК === */
+        .cake-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 5;
+            font-size: 60px;
+            transition: all 0.5s ease;
+        }
+
+        .cake {
+            position: relative;
+            display: inline-block;
+        }
+
+        .candle {
+            position: absolute;
+            top: -25px;
+            font-size: 20px;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .candle.lit {
+            opacity: 1;
+            animation: flame 1s ease-in-out infinite;
+        }
+
+        .candle.extinguished {
+            opacity: 0.3;
+            animation: smoke 2s ease-out;
+        }
+
+        @keyframes flame {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.1); filter: brightness(1.3); }
+        }
+
+        @keyframes smoke {
+            0% { transform: translateY(0); opacity: 0.3; }
+            100% { transform: translateY(-20px); opacity: 0; }
+        }
+
         /* === КОНФЕТТИ === */
         .confetti {
             position: fixed;
             width: 10px;
             height: 10px;
             background: #e8b4b8;
-            position: absolute;
             animation: fall 3s linear forwards;
             z-index: 100;
+            pointer-events: none;
         }
 
         @keyframes fall {
@@ -288,34 +366,97 @@
 
         /* === АДАПТИВНОСТЬ === */
         @media (max-width: 480px) {
-            .envelope {
+            .envelope-container {
                 width: 280px;
                 height: 190px;
             }
-            
+
             .envelope::before {
                 border-left: 140px solid transparent;
                 border-right: 140px solid transparent;
                 border-top: 95px solid #f0e0db;
             }
-            
+
             .envelope::after {
                 border-left: 140px solid #d4c4c0;
                 border-right: 140px solid #d4c4c0;
                 border-bottom: 95px solid #c9b8b4;
             }
-            
-            .photo-card {
-                width: 300px;
+
+            .recipient-name {
+                font-size: 28px;
             }
-            
-            .photo-wrapper {
-                height: 300px;
+
+            .photo-card {
+                width: 280px;
+                padding: 15px 15px 60px 15px;
+            }
+
+            .photo-inner {
+                height: 280px;
+            }
+
+            .photo-back {
+                padding: 20px;
+            }
+
+            .cake-container {
+                font-size: 50px;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .envelope-container {
+                width: 260px;
+                height: 175px;
+            }
+
+            .envelope::before {
+                border-left: 130px solid transparent;
+                border-right: 130px solid transparent;
+                border-top: 88px solid #f0e0db;
+            }
+
+            .envelope::after {
+                border-left: 130px solid #d4c4c0;
+                border-right: 130px solid #d4c4c0;
+                border-bottom: 88px solid #c9b8b4;
+            }
+
+            .photo-card {
+                width: 260px;
+                padding: 12px 12px 55px 12px;
+            }
+
+            .photo-inner {
+                height: 260px;
+            }
+
+            .birthday-title {
+                font-size: 22px;
+            }
+
+            .age-text, .wish-text {
+                font-size: 11px;
             }
         }
     </style>
 </head>
 <body>
+
+    <!-- ХЛОПУШКИ -->
+    <div class="cracker" style="top: 5%; left: 10%;">🎉</div>
+    <div class="cracker" style="top: 8%; right: 12%;">🎊</div>
+    <div class="cracker" style="top: 15%; left: 5%;">✨</div>
+    <div class="cracker" style="top: 12%; right: 8%;">🎈</div>
+    <div class="cracker" style="top: 20%; left: 8%;">🎉</div>
+    <div class="cracker" style="bottom: 30%; left: 5%;">🎊</div>
+    <div class="cracker" style="bottom: 25%; right: 10%;">✨</div>
+    <div class="cracker" style="bottom: 35%; left: 12%;">🎈</div>
+    <div class="cracker" style="bottom: 40%; right: 5%;">🎉</div>
+    <div class="cracker" style="top: 25%; right: 15%;">🎊</div>
 
     <!-- КОНВЕРТ -->
     <div class="envelope-container" id="envelopeContainer">
@@ -329,50 +470,62 @@
 
     <!-- INSTAX КАРТОЧКА -->
     <div class="photo-card" id="photoCard">
-        <!-- ЛИЦЕВАЯ СТОРОНА (ФОТО) -->
-        <div class="photo-front">
-            <div class="photo-wrapper">
-                <img src="photo.jpg" alt="Лилия">
-            </div>
-            <div class="photo-label">INSTAX MINI</div>
-        </div>
-        
-        <!-- ОБОРОТНАЯ СТОРОНА (ТЕКСТ) -->
-        <div class="photo-back">
-            <div class="birthday-title">🎉 С Днём Рождения! 🎂</div>
-            <div class="age-text">
-                <strong>22</strong><br>
-                Пусть твои 22 принесут тебе в грядущем году<br>
-                только самое лучшее! ✨🌸
-            </div>
-
-            <div class="wish-item" onclick="revealWish(this)">
-                <div class="wish-text">
-                    <span class="wish-candle">🕯️</span>
-                    Желаю, чтобы тебе попадались только самые лучшие проекты, команда не подводила и вдохновляла! 💼✨
+        <div class="photo-inner">
+            <!-- ЛИЦЕВАЯ СТОРОНА (ФОТО) -->
+            <div class="photo-front">
+                <div class="photo-wrapper">
+                    <img src="photo.jpg" alt="Лилия">
                 </div>
+                <div class="photo-label">INSTAX MINI</div>
             </div>
-
-            <div class="wish-item" onclick="revealWish(this)">
-                <div class="wish-text">
-                    <span class="wish-candle">🕯️</span>
-                    Желаю крепкого здоровья! Чтобы ни один паразит не смог тебя укусить! 💪️
+            
+            <!-- ОБОРОТНАЯ СТОРОНА (ТЕКСТ) -->
+            <div class="photo-back">
+                <div class="birthday-title">🎉 С Днём Рождения! 🎂</div>
+                <div class="age-text">
+                    <strong>22</strong><br>
+                    Пусть твои 22 принесут тебе в грядущем году<br>
+                    только самое лучшее! ✨🌸
                 </div>
-            </div>
 
-            <div class="wish-item" onclick="revealWish(this)">
-                <div class="wish-text">
-                    <span class="wish-candle">🕯️</span>
-                    Желаю тебе всегда оставаться такой же красотулькой 💖 и реализовать все твои хотелки! 🌟
+                <div class="wish-item" onclick="revealWish(this)">
+                    <div class="wish-text">
+                        <span class="wish-candle">🕯️</span>
+                        Желаю, чтобы тебе попадались только самые лучшие проекты, команда не подводила и вдохновляла! 💼✨
+                    </div>
                 </div>
-            </div>
 
-            <div class="love-message">
-                ❤️ Люблю тебя сильно-сильно,<br>моя старушечка ❤️
+                <div class="wish-item" onclick="revealWish(this)">
+                    <div class="wish-text">
+                        <span class="wish-candle">🕯️</span>
+                        Желаю крепкого здоровья! Чтобы ни один паразит не смог тебя укусить! 💪️
+                    </div>
+                </div>
+
+                <div class="wish-item" onclick="revealWish(this)">
+                    <div class="wish-text">
+                        <span class="wish-candle">🕯️</span>
+                        Желаю тебе всегда оставаться такой же красотулькой 💖 и реализовать все твои хотелки! 🌟
+                    </div>
+                </div>
+
+                <div class="love-message">
+                    ❤️ Люблю тебя сильно-сильно,<br>моя старушечка ❤️
+                </div>
             </div>
         </div>
         
         <div class="flip-hint" id="flipHint">💭 кликни чтобы перевернуть</div>
+    </div>
+
+    <!-- ТОРТИК -->
+    <div class="cake-container" id="cakeContainer" style="opacity: 0;">
+        <div class="cake">
+            <span class="candle" id="candle1">🕯️</span>
+            <span class="candle" id="candle2">🕯️</span>
+            <span class="candle" id="candle3">🕯️</span>
+            🎂
+        </div>
     </div>
 
     <script>
@@ -380,6 +533,8 @@
         const envelope = document.getElementById('envelope');
         const photoCard = document.getElementById('photoCard');
         const flipHint = document.getElementById('flipHint');
+        const cakeContainer = document.getElementById('cakeContainer');
+        const crackers = document.querySelectorAll('.cracker');
         let isFlipped = false;
         let wishesRevealed = 0;
 
@@ -390,10 +545,60 @@
             setTimeout(() => {
                 photoCard.classList.add('show');
                 createConfetti();
+                activateTopCrackers();
+                showCake();
+                lightCandles();
             }, 400);
             
             envelopeContainer.style.pointerEvents = 'none';
         });
+
+        // Показать тортик
+        function showCake() {
+            setTimeout(() => {
+                cakeContainer.style.opacity = '1';
+                cakeContainer.style.transform = 'scale(1)';
+            }, 600);
+        }
+
+        // Зажечь свечи
+        function lightCandles() {
+            setTimeout(() => {
+                document.getElementById('candle1').classList.add('lit');
+                document.getElementById('candle2').classList.add('lit');
+                document.getElementById('candle3').classList.add('lit');
+            }, 1000);
+        }
+
+        // Погасить свечи
+        function extinguishCandles() {
+            document.getElementById('candle1').classList.remove('lit');
+            document.getElementById('candle2').classList.remove('lit');
+            document.getElementById('candle3').classList.remove('lit');
+            document.getElementById('candle1').classList.add('extinguished');
+            document.getElementById('candle2').classList.add('extinguished');
+            document.getElementById('candle3').classList.add('extinguished');
+        }
+
+        // Активировать верхние хлопушки
+        function activateTopCrackers() {
+            setTimeout(() => {
+                crackers[0].classList.add('active');
+                crackers[1].classList.add('active');
+                crackers[2].classList.add('active');
+                crackers[3].classList.add('active');
+            }, 800);
+        }
+
+        // Активировать нижние хлопушки
+        function activateBottomCrackers() {
+            crackers[4].classList.add('active');
+            crackers[5].classList.add('active');
+            crackers[6].classList.add('active');
+            crackers[7].classList.add('active');
+            crackers[8].classList.add('active');
+            crackers[9].classList.add('active');
+        }
 
         // Переворот карточки
         photoCard.addEventListener('click', function(e) {
@@ -410,9 +615,13 @@
                 element.classList.add('revealed');
                 wishesRevealed++;
                 
-                // Если все пожелания открыты — создаём конфетти
+                // Если все пожелания открыты
                 if (wishesRevealed === 3) {
-                    setTimeout(createConfetti, 300);
+                    setTimeout(() => {
+                        createConfetti();
+                        activateBottomCrackers();
+                        extinguishCandles();
+                    }, 500);
                 }
             }
         }
@@ -426,6 +635,7 @@
                     const confetti = document.createElement('div');
                     confetti.className = 'confetti';
                     confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.top = '-10px';
                     confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
                     confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
                     document.body.appendChild(confetti);
