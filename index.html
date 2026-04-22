@@ -20,30 +20,55 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            overflow: hidden; /* Чтобы скролл не ломал верстку */
             position: relative;
         }
 
-        /* === ХЛОПУШКИ === */
-        .cracker {
+        /* === ДЕКОРАЦИИ (СТИКЕРЫ) === */
+        .decoration {
             position: fixed;
-            font-size: 24px;
-            opacity: 0.3;
-            transition: all 0.5s ease;
             z-index: 1;
             pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .float-anim {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .twinkle-anim {
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.4; transform: scale(0.9); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        /* === ХЛОПУШКИ (ОСНОВНЫЕ) === */
+        .cracker {
+            position: fixed;
+            font-size: 30px;
+            opacity: 0;
+            z-index: 2;
+            pointer-events: none;
+            transition: opacity 0.5s;
         }
 
         .cracker.active {
             opacity: 1;
-            transform: scale(1.3) rotate(15deg);
-            animation: pop 0.6s ease;
+            animation: pop 0.6s ease forwards;
         }
 
         @keyframes pop {
-            0% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.5) rotate(20deg); }
-            100% { transform: scale(1.3) rotate(15deg); }
+            0% { transform: scale(0.5); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(1); }
         }
 
         /* === КОНВЕРТ === */
@@ -65,7 +90,7 @@
             height: 100%;
             background: linear-gradient(135deg, #e8d5d0 0%, #d4c4c0 100%);
             position: relative;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
             border-radius: 8px;
         }
 
@@ -119,7 +144,7 @@
 
         .recipient-name {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 30px;
+            font-size: 32px;
             color: #6b5b57;
             letter-spacing: 3px;
             margin-bottom: 10px;
@@ -139,13 +164,16 @@
             left: 50%;
             transform: translate(-50%, -50%) scale(0);
             width: 300px;
+            height: 420px; /* Фиксированная высота */
             background: white;
-            padding: 18px 18px 65px 18px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 15px 15px 50px 15px;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.35);
             z-index: 20;
             transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
             border-radius: 4px;
+            display: flex;
+            flex-direction: column;
         }
 
         .photo-card.show {
@@ -155,7 +183,7 @@
         .photo-inner {
             position: relative;
             width: 100%;
-            height: 300px;
+            height: 100%;
             transform-style: preserve-3d;
             transition: transform 0.8s ease;
         }
@@ -180,13 +208,26 @@
         .photo-back {
             transform: rotateY(180deg);
             background: linear-gradient(135deg, #faf8f5 0%, #f5ebe0 100%);
-            padding: 25px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
             text-align: center;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.05);
+            border: 1px solid #e0d5d0;
+        }
+
+        /* КОНТЕНТ НА ОБРАТНОЙ СТОРОНЕ */
+        .back-content {
+            padding: 20px;
+            height: 100%;
+            overflow-y: auto; /* Прокрутка если текст не влезает */
+            width: 100%;
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        
+        .back-content::-webkit-scrollbar {
+            display: none;
         }
 
         .photo-wrapper {
@@ -224,19 +265,23 @@
             color: #8b7b77;
             white-space: nowrap;
             animation: pulse 2s ease-in-out infinite;
+            z-index: 30;
+            background: rgba(255,255,255,0.8);
+            padding: 5px 10px;
+            border-radius: 15px;
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
+            0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+            50% { opacity: 1; transform: translateX(-50%) scale(1.05); }
         }
 
-        /* === ОБРАТНАЯ СТОРОНА === */
+        /* === ТЕКСТЫ === */
         .birthday-title {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 24px;
+            font-size: 26px;
             color: #6b5b57;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             font-weight: 600;
         }
 
@@ -244,32 +289,32 @@
             font-size: 12px;
             color: #8b7b77;
             margin-bottom: 15px;
-            line-height: 1.5;
+            line-height: 1.4;
         }
 
         .wish-item {
-            margin: 12px 0;
+            margin: 10px 0;
             cursor: pointer;
             transition: all 0.3s ease;
             width: 100%;
         }
 
         .wish-item:hover {
-            transform: translateX(5px);
+            transform: translateX(3px);
         }
 
         .wish-candle {
             font-size: 14px;
-            margin-right: 6px;
+            margin-right: 5px;
         }
 
         .wish-text {
             font-size: 11px;
             color: #6b5b57;
-            line-height: 1.6;
+            line-height: 1.5;
             filter: blur(4px);
             opacity: 0.6;
-            transition: all 0.5s ease;
+            transition: all 0.6s ease;
             user-select: none;
         }
 
@@ -288,11 +333,11 @@
         }
 
         .love-message {
-            margin-top: 20px;
-            padding-top: 15px;
+            margin-top: 15px;
+            padding-top: 10px;
             border-top: 1px solid #e0d5d0;
             font-family: 'Cormorant Garamond', serif;
-            font-size: 16px;
+            font-size: 18px;
             color: #c97b7b;
             font-style: italic;
             animation: heartbeat 2s ease-in-out infinite;
@@ -303,14 +348,15 @@
             50% { transform: scale(1.05); }
         }
 
-        /* === ТОРТИК === */
+        /* === ТОРТИК (БОЛЬШОЙ) === */
         .cake-container {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 10px;
+            right: 10px;
             z-index: 5;
-            font-size: 60px;
+            font-size: 80px; /* Увеличили размер */
             transition: all 0.5s ease;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
         }
 
         .cake {
@@ -320,37 +366,37 @@
 
         .candle {
             position: absolute;
-            top: -25px;
-            font-size: 20px;
+            top: -30px;
+            font-size: 24px;
             opacity: 0;
             transition: all 0.5s ease;
         }
 
         .candle.lit {
             opacity: 1;
-            animation: flame 1s ease-in-out infinite;
+            animation: flame 0.8s ease-in-out infinite alternate;
         }
 
         .candle.extinguished {
-            opacity: 0.3;
-            animation: smoke 2s ease-out;
+            opacity: 0.5;
+            animation: smoke 2s ease-out forwards;
         }
 
         @keyframes flame {
-            0%, 100% { transform: scale(1); filter: brightness(1); }
-            50% { transform: scale(1.1); filter: brightness(1.3); }
+            0% { transform: scale(1) rotate(-5deg); }
+            100% { transform: scale(1.1) rotate(5deg); }
         }
 
         @keyframes smoke {
-            0% { transform: translateY(0); opacity: 0.3; }
-            100% { transform: translateY(-20px); opacity: 0; }
+            0% { transform: translateY(0); opacity: 0.5; }
+            100% { transform: translateY(-30px); opacity: 0; }
         }
 
         /* === КОНФЕТТИ === */
         .confetti {
             position: fixed;
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
             background: #e8b4b8;
             animation: fall 3s linear forwards;
             z-index: 100;
@@ -359,7 +405,7 @@
 
         @keyframes fall {
             to {
-                transform: translateY(100vh) rotate(360deg);
+                transform: translateY(110vh) rotate(720deg);
                 opacity: 0;
             }
         }
@@ -388,75 +434,64 @@
             }
 
             .photo-card {
-                width: 280px;
-                padding: 15px 15px 60px 15px;
-            }
-
-            .photo-inner {
-                height: 280px;
+                width: 290px;
+                height: 400px; /* Чуть меньше высота на мобильном */
+                padding: 10px 10px 45px 10px;
             }
 
             .photo-back {
-                padding: 20px;
+                padding: 5px;
             }
+            
+            .back-content {
+                padding: 15px 10px;
+            }
+
+            .birthday-title { font-size: 22px; }
+            .age-text { font-size: 11px; }
+            .wish-text { font-size: 10px; }
+            .love-message { font-size: 16px; }
 
             .cake-container {
-                font-size: 50px;
-                bottom: 15px;
-                right: 15px;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .envelope-container {
-                width: 260px;
-                height: 175px;
-            }
-
-            .envelope::before {
-                border-left: 130px solid transparent;
-                border-right: 130px solid transparent;
-                border-top: 88px solid #f0e0db;
-            }
-
-            .envelope::after {
-                border-left: 130px solid #d4c4c0;
-                border-right: 130px solid #d4c4c0;
-                border-bottom: 88px solid #c9b8b4;
-            }
-
-            .photo-card {
-                width: 260px;
-                padding: 12px 12px 55px 12px;
-            }
-
-            .photo-inner {
-                height: 260px;
-            }
-
-            .birthday-title {
-                font-size: 22px;
-            }
-
-            .age-text, .wish-text {
-                font-size: 11px;
+                font-size: 70px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- ХЛОПУШКИ -->
-    <div class="cracker" style="top: 5%; left: 10%;">🎉</div>
-    <div class="cracker" style="top: 8%; right: 12%;">🎊</div>
-    <div class="cracker" style="top: 15%; left: 5%;">✨</div>
-    <div class="cracker" style="top: 12%; right: 8%;">🎈</div>
-    <div class="cracker" style="top: 20%; left: 8%;">🎉</div>
-    <div class="cracker" style="bottom: 30%; left: 5%;">🎊</div>
-    <div class="cracker" style="bottom: 25%; right: 10%;">✨</div>
-    <div class="cracker" style="bottom: 35%; left: 12%;">🎈</div>
-    <div class="cracker" style="bottom: 40%; right: 5%;">🎉</div>
-    <div class="cracker" style="top: 25%; right: 15%;">🎊</div>
+    <!-- ДЕКОРАЦИИ (СТИКЕРЫ) -->
+    <!-- Верхний левый -->
+    <div class="decoration" style="top: 5%; left: 5%; font-size: 40px;">🎈</div>
+    <div class="decoration float-anim" style="top: 15%; left: 2%; font-size: 30px;">✨</div>
+    <div class="decoration" style="top: 25%; left: 8%; font-size: 25px;">🌸</div>
+    
+    <!-- Верхний правый -->
+    <div class="decoration float-anim" style="top: 8%; right: 5%; font-size: 35px;">🎈</div>
+    <div class="decoration" style="top: 20%; right: 8%; font-size: 28px;">🐱</div>
+    <div class="decoration twinkle-anim" style="top: 12%; right: 2%; font-size: 20px;">💫</div>
+
+    <!-- Нижний левый -->
+    <div class="decoration float-anim" style="bottom: 20%; left: 5%; font-size: 35px;">🐶</div>
+    <div class="decoration" style="bottom: 30%; left: 2%; font-size: 25px;">🎈</div>
+    <div class="decoration twinkle-anim" style="bottom: 10%; left: 10%; font-size: 22px;">✨</div>
+
+    <!-- Нижний правый -->
+    <div class="decoration" style="bottom: 25%; right: 5%; font-size: 30px;">🌸</div>
+    <div class="decoration float-anim" style="bottom: 15%; right: 10%; font-size: 25px;">🎈</div>
+    <div class="decoration" style="top: 40%; right: 2%; font-size: 20px;">💫</div>
+
+    <!-- ХЛОПУШКИ (появляются при действии) -->
+    <div class="cracker" style="top: 10%; left: 15%;">🎉</div>
+    <div class="cracker" style="top: 15%; right: 15%;">🎊</div>
+    <div class="cracker" style="top: 30%; left: 5%;">🎈</div>
+    <div class="cracker" style="top: 25%; right: 5%;">✨</div>
+    <div class="cracker" style="bottom: 20%; left: 10%;">🎉</div>
+    <div class="cracker" style="bottom: 25%; right: 15%;">🎊</div>
+    <div class="cracker" style="bottom: 40%; left: 5%;">🎈</div>
+    <div class="cracker" style="bottom: 35%; right: 5%;">✨</div>
+    <div class="cracker" style="top: 50%; left: 10%;">🎉</div>
+    <div class="cracker" style="top: 55%; right: 10%;">🎊</div>
 
     <!-- КОНВЕРТ -->
     <div class="envelope-container" id="envelopeContainer">
@@ -474,6 +509,7 @@
             <!-- ЛИЦЕВАЯ СТОРОНА (ФОТО) -->
             <div class="photo-front">
                 <div class="photo-wrapper">
+                    <!-- ЗАМЕНИ photo.jpg НА СВОЕ ФОТО -->
                     <img src="photo.jpg" alt="Лилия">
                 </div>
                 <div class="photo-label">INSTAX MINI</div>
@@ -481,36 +517,37 @@
             
             <!-- ОБОРОТНАЯ СТОРОНА (ТЕКСТ) -->
             <div class="photo-back">
-                <div class="birthday-title">🎉 С Днём Рождения! 🎂</div>
-                <div class="age-text">
-                    <strong>22</strong><br>
-                    Пусть твои 22 принесут тебе в грядущем году<br>
-                    только самое лучшее! ✨🌸
-                </div>
-
-                <div class="wish-item" onclick="revealWish(this)">
-                    <div class="wish-text">
-                        <span class="wish-candle">🕯️</span>
-                        Желаю, чтобы тебе попадались только самые лучшие проекты, команда не подводила и вдохновляла! 💼✨
+                <div class="back-content">
+                    <div class="birthday-title">🎉 С Днём Рождения! 🎂</div>
+                    <div class="age-text">
+                        <strong>22</strong><br>
+                        Пусть твои 22 принесут тебе в грядущем году только самое лучшее! ✨🌸
                     </div>
-                </div>
 
-                <div class="wish-item" onclick="revealWish(this)">
-                    <div class="wish-text">
-                        <span class="wish-candle">🕯️</span>
-                        Желаю крепкого здоровья! Чтобы ни один паразит не смог тебя укусить! 💪️
+                    <div class="wish-item" onclick="revealWish(this)">
+                        <div class="wish-text">
+                            <span class="wish-candle">🕯️</span>
+                            Желаю, чтобы тебе попадались только самые лучшие проекты, команда не подводила и вдохновляла! 💼✨
+                        </div>
                     </div>
-                </div>
 
-                <div class="wish-item" onclick="revealWish(this)">
-                    <div class="wish-text">
-                        <span class="wish-candle">🕯️</span>
-                        Желаю тебе всегда оставаться такой же красотулькой 💖 и реализовать все твои хотелки! 🌟
+                    <div class="wish-item" onclick="revealWish(this)">
+                        <div class="wish-text">
+                            <span class="wish-candle">🕯️</span>
+                            Желаю крепкого здоровья! Чтобы ни один паразит не смог тебя укусить! 💪️
+                        </div>
                     </div>
-                </div>
 
-                <div class="love-message">
-                    ❤️ Люблю тебя сильно-сильно,<br>моя старушечка ❤️
+                    <div class="wish-item" onclick="revealWish(this)">
+                        <div class="wish-text">
+                            <span class="wish-candle">🕯️</span>
+                            Желаю тебе всегда оставаться такой же красотулькой 💖 и реализовать все твои хотелки! 🌟
+                        </div>
+                    </div>
+
+                    <div class="love-message">
+                        ❤️ Люблю тебя сильно-сильно,<br>моя старушечка ❤️
+                    </div>
                 </div>
             </div>
         </div>
@@ -519,7 +556,7 @@
     </div>
 
     <!-- ТОРТИК -->
-    <div class="cake-container" id="cakeContainer" style="opacity: 0;">
+    <div class="cake-container" id="cakeContainer" style="opacity: 0; transform: scale(0.5);">
         <div class="cake">
             <span class="candle" id="candle1">🕯️</span>
             <span class="candle" id="candle2">🕯️</span>
@@ -567,7 +604,7 @@
                 document.getElementById('candle1').classList.add('lit');
                 document.getElementById('candle2').classList.add('lit');
                 document.getElementById('candle3').classList.add('lit');
-            }, 1000);
+            }, 1200);
         }
 
         // Погасить свечи
@@ -602,6 +639,8 @@
 
         // Переворот карточки
         photoCard.addEventListener('click', function(e) {
+            // Проверяем, не кликнули ли мы по скроллируемому тексту
+            // Если карточка уже открыта и мы на лицевой стороне
             if (!isFlipped) {
                 photoCard.classList.add('flipped');
                 flipHint.style.display = 'none';
@@ -611,6 +650,7 @@
 
         // Раскрытие пожеланий
         function revealWish(element) {
+            event.stopPropagation(); // Чтобы не срабатывал клик на карточку
             if (!element.classList.contains('revealed')) {
                 element.classList.add('revealed');
                 wishesRevealed++;
@@ -628,20 +668,22 @@
 
         // Конфетти
         function createConfetti() {
-            const colors = ['#e8b4b8', '#d4a5a5', '#c9b8b4', '#f0d5d0', '#e8d5d0'];
+            const colors = ['#e8b4b8', '#d4a5a5', '#c9b8b4', '#f0d5d0', '#e8d5d0', '#ffb3b3'];
             
-            for (let i = 0; i < 30; i++) {
+            for (let i = 0; i < 40; i++) {
                 setTimeout(() => {
                     const confetti = document.createElement('div');
                     confetti.className = 'confetti';
                     confetti.style.left = Math.random() * 100 + 'vw';
-                    confetti.style.top = '-10px';
+                    confetti.style.top = '-20px';
                     confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
                     confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                    confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                    confetti.style.height = (Math.random() * 10 + 5) + 'px';
                     document.body.appendChild(confetti);
                     
-                    setTimeout(() => confetti.remove(), 3000);
-                }, i * 50);
+                    setTimeout(() => confetti.remove(), 3500);
+                }, i * 30);
             }
         }
     </script>
